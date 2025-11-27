@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Turnos Inteligente - Clínica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">🏥 Gestor de Turnos</h1>
+            <ul class="nav-menu">
+                <li><a href="#" data-section="turnos" class="nav-link active">Turnos</a></li>
+                <li><a href="#" data-section="pacientes" class="nav-link">Pacientes</a></li>
+                <li><a href="#" data-section="medicos" class="nav-link">Médicos</a></li>
+                <li><a href="#" data-section="reportes" class="nav-link">Reportes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container main-content">
+        <!-- SECCIÓN TURNOS -->
+        <section id="turnos-section" class="content-section active">
+            <div class="section-header">
+                <h2>Gestión de Turnos</h2>
+                <button class="btn btn-primary" id="btn-nuevo-turno">+ Nuevo Turno</button>
+            </div>
+
+            <div class="filters-card">
+                <div class="filters-grid">
+                    <input type="date" id="filter-fecha-desde" class="input">
+                    <input type="date" id="filter-fecha-hasta" class="input">
+                    <select id="filter-medico" class="input">
+                        <option value="">Todos los médicos</option>
+                    </select>
+                    <select id="filter-estado" class="input">
+                        <option value="">Todos los estados</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="atendido">Atendido</option>
+                        <option value="cancelado">Cancelado</option>
+                        <option value="ausente">Ausente</option>
+                    </select>
+                    <button class="btn btn-secondary" id="btn-filtrar-turnos">Filtrar</button>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <input type="text" id="search-turnos" class="input search-input" placeholder="Buscar por paciente o DNI...">
+                    <span class="table-info">Mostrando <span id="turnos-count">0</span> turnos</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha/Hora</th>
+                                <th>Paciente</th>
+                                <th>DNI</th>
+                                <th>Médico</th>
+                                <th>Especialidad</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="turnos-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center">Cargando turnos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="turnos-pagination"></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PACIENTES -->
+        <section id="pacientes-section" class="content-section">
+            <div class="section-header">
+                <h2>Gestión de Pacientes</h2>
+                <button class="btn btn-primary" id="btn-nuevo-paciente">+ Nuevo Paciente</button>
+            </div>
+
+            <div class="table-card">
+                <div class="table-header">
+                    <input type="text" id="search-pacientes" class="input search-input" placeholder="Buscar por nombre, apellido o DNI...">
+                    <span class="table-info">Total: <span id="pacientes-count">0</span> pacientes</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>DNI</th>
+                                <th>Apellido y Nombre</th>
+                                <th>Fecha Nacimiento</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Obra Social</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pacientes-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center">Cargando pacientes...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pacientes-pagination"></div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN MÉDICOS -->
+        <section id="medicos-section" class="content-section">
+            <div class="section-header">
+                <h2>Gestión de Médicos</h2>
+                <button class="btn btn-primary" id="btn-nuevo-medico">+ Nuevo Médico</button>
+            </div>
+
+            <div class="table-card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Matrícula</th>
+                                <th>Apellido y Nombre</th>
+                                <th>Especialidad</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicos-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center">Cargando médicos...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN REPORTES -->
+        <section id="reportes-section" class="content-section">
+            <div class="section-header">
+                <h2>Reportes y Estadísticas</h2>
+            </div>
+
+            <div class="filters-card">
+                <h3>Reporte Diario</h3>
+                <div class="filters-grid">
+                    <input type="date" id="reporte-fecha" class="input">
+                    <button class="btn btn-primary" id="btn-generar-reporte">Generar Reporte</button>
+                </div>
+            </div>
+
+            <div class="stats-grid" id="stats-container" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Total Turnos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-atendidos">0</div>
+                    <div class="stat-label">Atendidos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-pendientes">0</div>
+                    <div class="stat-label">Pendientes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-tasa">0%</div>
+                    <div class="stat-label">Tasa Asistencia</div>
+                </div>
+            </div>
+
+            <div class="table-card" id="reporte-table-container" style="display: none;">
+                <h3>Detalle de Turnos</h3>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Hora</th>
+                                <th>Paciente</th>
+                                <th>Médico</th>
+                                <th>Especialidad</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reporte-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL NUEVO/EDITAR TURNO -->
+    <div id="modal-turno" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-turno-title">Nuevo Turno</h3>
+                <button class="modal-close" data-modal="modal-turno">&times;</button>
+            </div>
+            <form id="form-turno">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Paciente *</label>
+                        <select id="turno-paciente" class="input" required>
+                            <option value="">Seleccione un paciente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidad *</label>
+                        <select id="turno-especialidad" class="input" required>
+                            <option value="">Seleccione especialidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Médico *</label>
+                        <select id="turno-medico" class="input" required disabled>
+                            <option value="">Primero seleccione especialidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha *</label>
+                        <input type="date" id="turno-fecha" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hora *</label>
+                        <select id="turno-hora" class="input" required disabled>
+                            <option value="">Seleccione fecha y médico</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Duración (minutos)</label>
+                        <input type="number" id="turno-duracion" class="input" value="30" min="15" step="15">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Motivo de Consulta</label>
+                        <textarea id="turno-motivo" class="input" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal="modal-turno">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Turno</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NUEVO/EDITAR PACIENTE -->
+    <div id="modal-paciente" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-paciente-title">Nuevo Paciente</h3>
+                <button class="modal-close" data-modal="modal-paciente">&times;</button>
+            </div>
+            <form id="form-paciente">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>DNI *</label>
+                        <input type="text" id="paciente-dni" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" id="paciente-nombre" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido *</label>
+                        <input type="text" id="paciente-apellido" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Nacimiento *</label>
+                        <input type="date" id="paciente-fecha-nacimiento" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono *</label>
+                        <input type="tel" id="paciente-telefono" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="paciente-email" class="input">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Dirección</label>
+                        <input type="text" id="paciente-direccion" class="input">
+                    </div>
+                    <div class="form-group">
+                        <label>Obra Social</label>
+                        <input type="text" id="paciente-obra-social" class="input" value="Particular">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal="modal-paciente">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Paciente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL NUEVO/EDITAR MÉDICO -->
+    <div id="modal-medico" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-medico-title">Nuevo Médico</h3>
+                <button class="modal-close" data-modal="modal-medico">&times;</button>
+            </div>
+            <form id="form-medico">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Matrícula *</label>
+                        <input type="text" id="medico-matricula" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nombre *</label>
+                        <input type="text" id="medico-nombre" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Apellido *</label>
+                        <input type="text" id="medico-apellido" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Especialidad *</label>
+                        <select id="medico-especialidad" class="input" required>
+                            <option value="">Seleccione especialidad</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono *</label>
+                        <input type="tel" id="medico-telefono" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="medico-email" class="input">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal="modal-medico">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Médico</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
