@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://tu-backend-desplegado.up.railway.app/api';
 
 let currentPage = {
     turnos: 1,
@@ -99,6 +99,16 @@ async function loadEspecialidades() {
         const selects = ['turno-especialidad', 'medico-especialidad'];
         selects.forEach(selectId => {
             const select = document.getElementById(selectId);
+            select.innerHTML = '<option value="">Seleccione...</option>';
+            result.data.forEach(esp => {
+                select.innerHTML += `<option value="${esp.id}">${esp.nombre}</option>`;
+            });
+        });
+    } catch (error) {
+        console.error('Error loading especialidades:', error);
+        showError('Error al cargar especialidades');
+    }
+}
             select.innerHTML = '<option value="">Seleccione especialidad</option>';
             result.data.forEach(esp => {
                 select.innerHTML += `<option value="${esp.id}">${esp.nombre}</option>`;
