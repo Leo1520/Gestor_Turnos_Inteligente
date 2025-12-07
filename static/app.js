@@ -109,15 +109,7 @@ async function loadEspecialidades() {
         showError('Error al cargar especialidades');
     }
 }
-            select.innerHTML = '<option value="">Seleccione especialidad</option>';
-            result.data.forEach(esp => {
-                select.innerHTML += `<option value="${esp.id}">${esp.nombre}</option>`;
-            });
-        });
-    } catch (error) {
-        showNotification('Error al cargar especialidades', 'error');
-    }
-}
+
 
 async function loadPacientes() {
     try {
