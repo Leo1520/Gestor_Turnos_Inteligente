@@ -93,6 +93,31 @@ Si aun así quieres usar XAMPP, dime y te doy una lista de los cambios necesario
 
 - Tu XAMPP usa puerto `3307` para MySQL; eso no interfiere con el puerto `5000` donde corre Flask ni con `5432` (Postgres). Si usas Docker/PG local, asegúrate de mapear puertos para evitar colisiones.
 
+## Servir frontend desde XAMPP (Apache)
+
+Si quieres acceder a la app con la URL `http://localhost/Gestor_Turnos_Inteligente/` usando XAMPP:
+
+1. Asegúrate de que la carpeta del proyecto está en `C:\xampp\htdocs\Gestor_Turnos_Inteligente` (ya lo está).
+2. He añadido un `index.html` en la raíz que redirige automáticamente a `static/index.html`. De esa forma `http://localhost/Gestor_Turnos_Inteligente/` abrirá la interfaz.
+3. Inicia Apache desde el panel de XAMPP.
+4. Inicia el backend Flask como en los pasos previos (`python app.py`). El frontend hará peticiones a `http://localhost:5000/api`.
+
+Nota sobre CORS: la aplicación Flask ya tiene `CORS(app)` configurado; eso permite que el frontend (servido por Apache en `localhost`) haga peticiones al backend en `localhost:5000`.
+
+### Opción avanzada: usar Apache como proxy inverso (evita CORS y mantiene una sola URL)
+
+Si prefieres que la API esté disponible bajo la misma URL (por ejemplo `http://localhost/Gestor_Turnos_Inteligente/api`), habilita `mod_proxy` en Apache y añade algo como esto en `httpd.conf` o en un VirtualHost:
+
+```
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
+ProxyPass "/Gestor_Turnos_Inteligente/api" "http://127.0.0.1:5000/api"
+ProxyPassReverse "/Gestor_Turnos_Inteligente/api" "http://127.0.0.1:5000/api"
+```
+
+Después reinicia Apache. Con esto, el frontend puede usar `API_URL = '/Gestor_Turnos_Inteligente/api'` sin problemas de CORS.
+
 ---
 
 ## Resumen rápido de comandos (PowerShell)
